@@ -23,7 +23,13 @@ rsvpForm.addEventListener("submit", async (event) => {
   const name = fields.get("guest-name").trim();
   const attendance = fields.get("attendance");
   const events = fields.getAll("event");
-  const guests = Number(fields.get("guest-count"));
+  const adults = Number(fields.get("adults"));
+  const children = Number(fields.get("children"));
+  const guests = adults + children;
+  const details = Object.fromEntries(
+    ["side", "relationship", "phone", "email", "food", "stay", "requirements"]
+      .map(key => [key, fields.get(key) ?? ""])
+  );
 
   if (!name) {
     replyStatus.textContent = "Enter your name to send your RSVP.";
@@ -36,6 +42,12 @@ rsvpForm.addEventListener("submit", async (event) => {
     return;
   }
 
+  if (guests > 50) {
+    replyStatus.textContent = "Please enter no more than 50 guests in total.";
+    rsvpForm.elements.adults.focus();
+    return;
+  }
+
   submissionId ??= crypto.randomUUID();
   const controls = [...rsvpForm.elements].filter(control => !control.disabled);
   controls.forEach(control => { control.disabled = true; });
@@ -44,7 +56,7 @@ rsvpForm.addEventListener("submit", async (event) => {
     const result = await fetch("/api/rsvp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: submissionId, name, attendance, events, guests }),
+      body: JSON.stringify({ id: submissionId, name, attendance, events, guests, adults, children, ...details }),
     });
     const data = await result.json();
     if (!result.ok || !data.success) throw new Error(data.error || "Your RSVP could not be confirmed.");

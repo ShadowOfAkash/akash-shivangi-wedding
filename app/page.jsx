@@ -202,6 +202,28 @@ export default async function WeddingPage() {
             <p className="rsvp-instructions">Send your RSVP directly to the couple.</p>
             <label htmlFor="guest-name">Your name</label>
             <input name="guest-name" id="guest-name" autoComplete="name" maxLength="120" required />
+            <div className="rsvp-details">
+              <label>Wedding side
+                <select name="side" defaultValue="" required>
+                  <option value="" disabled>Select a side</option>
+                  <option value="Groom">Groom’s side</option>
+                  <option value="Bride">Bride’s side</option>
+                  <option value="Both">Both sides</option>
+                </select>
+              </label>
+              <label>How do you know the couple?
+                <select name="relationship" defaultValue="" required>
+                  <option value="" disabled>Select a relationship</option>
+                  {["Family", "Friend", "Colleague", "Other"].map(value => <option key={value}>{value}</option>)}
+                </select>
+              </label>
+              <label>Phone number (optional)
+                <input type="tel" name="phone" autoComplete="tel" maxLength="30" />
+              </label>
+              <label>Email (optional)
+                <input type="email" name="email" autoComplete="email" maxLength="254" />
+              </label>
+            </div>
             <fieldset>
               <legend>Will you be there?</legend>
               <label><input type="radio" name="attendance" value="yes" required /> Yes, I’ll be there</label>
@@ -212,8 +234,34 @@ export default async function WeddingPage() {
               <label><input type="checkbox" name="event" value="haldi" defaultChecked /> {content.haldiName}</label>
               <label><input type="checkbox" name="event" value="mehndi" defaultChecked /> {content.mehndiName}</label>
               <label><input type="checkbox" name="event" value="wedding" defaultChecked /> {content.weddingName}</label>
-              <label className="guest-count" htmlFor="guest-count">Guests including you
-                <input type="number" name="guest-count" id="guest-count" defaultValue="1" min="1" max="50" required />
+              <div className="rsvp-details">
+                <label>Adults (including you)
+                  <input type="number" name="adults" defaultValue="1" min="1" max="50" required />
+                </label>
+                <label>Children
+                  <input type="number" name="children" defaultValue="0" min="0" max="49" required />
+                </label>
+                <label>Meal preference
+                  <select name="food" defaultValue="" required>
+                    <option value="" disabled>Select a preference</option>
+                    <option value="Vegetarian">Vegetarian</option>
+                    <option value="Non-Veg">Non-vegetarian</option>
+                    <option>Jain</option>
+                    <option>Vegan</option>
+                    <option>Other</option>
+                  </select>
+                </label>
+                <label>Do you need accommodation?
+                  <select name="stay" defaultValue="" required>
+                    <option value="" disabled>Select an option</option>
+                    <option value="No need of stay">No, I’m all set</option>
+                    <option>Hotel</option>
+                    <option>Home Stay</option>
+                  </select>
+                </label>
+              </div>
+              <label>Dietary or accessibility requests (optional)
+                <textarea name="requirements" rows="2" maxLength="500" />
               </label>
             </fieldset>
             <button className="primary-button" type="submit">Send RSVP</button>

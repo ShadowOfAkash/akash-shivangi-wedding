@@ -21,7 +21,7 @@ export async function POST(request) {
     });
     if (response.ok) return Response.json({ success: true });
     if (response.status === 400) {
-      return Response.json({ error: "Check your name, events and guest count." }, { status: 400 });
+      return Response.json({ error: "Check your mobile number and RSVP details." }, { status: 400 });
     }
   } catch (error) {
     console.error("Could not submit wedding RSVP:", error.message);

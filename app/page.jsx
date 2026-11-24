@@ -217,8 +217,8 @@ export default async function WeddingPage() {
                   {["Family", "Friend", "Colleague", "Other"].map(value => <option key={value}>{value}</option>)}
                 </select>
               </label>
-              <label>Phone number (optional)
-                <input type="tel" name="phone" autoComplete="tel" maxLength="30" />
+              <label>Mobile number (required)
+                <input type="tel" name="phone" autoComplete="tel" maxLength="30" required />
               </label>
               <label>Email (optional)
                 <input type="email" name="email" autoComplete="email" maxLength="254" />

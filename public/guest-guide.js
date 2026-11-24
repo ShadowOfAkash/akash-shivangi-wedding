@@ -36,6 +36,11 @@ rsvpForm.addEventListener("submit", async (event) => {
     rsvpForm.elements["guest-name"].focus();
     return;
   }
+  if (!/^\+?[0-9]{7,15}$/.test(details.phone.trim().replace(/[ ()-]/g, ""))) {
+    replyStatus.textContent = "Enter a valid mobile number, including the country code if needed.";
+    rsvpForm.elements.phone.focus();
+    return;
+  }
   if (attendance === "yes" && events.length === 0) {
     replyStatus.textContent = "Choose at least one event you’ll attend.";
     attendingFields.querySelector("input").focus();

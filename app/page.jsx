@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import Script from "next/script";
+import { WeddingRings } from "./loading";
 import { getWeddingContent } from "./content";
 
 export const dynamic = "force-dynamic";
@@ -27,9 +28,13 @@ export default async function WeddingPage() {
           <span id="flight" className="flight-marker" aria-hidden="true"></span>
           <div className="stage">
             <div className="scenery">
-              <img className="mandap-scene" src="/assets/wedding-meadow-pheras-4k.jpg" fetchPriority="high"
-                alt="A flower-lined meadow path leading to a distant mandap where the bride follows the groom around the havan fire." />
-              <video className="mandap-film" src="/assets/wedding-hero-2s.mp4" preload="auto" muted playsInline aria-hidden="true"></video>
+              <div className="hero-loading"><WeddingRings /></div>
+              <picture>
+                <source media="(max-aspect-ratio: 4/5)" srcSet="/assets/mandap-portrait.webp" />
+                <img className="mandap-scene" src="/assets/mandap-wide.webp" fetchPriority="high" decoding="async"
+                  alt="A flower-lined meadow path leading to a distant mandap where the bride follows the groom around the havan fire." />
+              </picture>
+              <video className="mandap-film" preload="none" muted playsInline aria-hidden="true"></video>
               <div className="clouds" aria-hidden="true">
                 <div className="cloud cloud-near"></div>
                 <div className="cloud cloud-far"></div>
@@ -85,7 +90,7 @@ export default async function WeddingPage() {
           <div className="photo-stage">
             <div className="story-landscape">
               <div className="story-image-plane">
-                <img src="/assets/meadow/couple.jpg" width="1200" height="1200" alt="A bride and groom walking through a flower meadow toward a mandap" loading="lazy" decoding="async" />
+                <img src="/assets/meadow/couple.webp" width="1200" height="1200" alt="A bride and groom walking through a flower meadow toward a mandap" loading="lazy" decoding="async" />
                 <div className="story-copy">
                   <div>
                     <h2>{content.firstFullName}</h2>
@@ -98,7 +103,7 @@ export default async function WeddingPage() {
                   </div>
                 </div>
                 <time className="story-date" dateTime={content.weddingAt.slice(0, 10)}>{shortDate.format(new Date(eventDate("wedding")))}</time>
-                <img className="story-foreground" src="/assets/meadow/couple.jpg" width="1200" height="1200" alt="" loading="lazy" decoding="async" />
+                <img className="story-foreground" src="/assets/meadow/couple.webp" width="1200" height="1200" alt="" loading="lazy" decoding="async" />
               </div>
             </div>
           </div>
@@ -115,7 +120,7 @@ export default async function WeddingPage() {
           </header>
           <article className="photo-scene event-scene haldi-scene" id="haldi" aria-labelledby="haldi-heading">
             <div className="photo-stage">
-              <img className="scene-photo" src="/assets/meadow/haldi-yellow.jpg" width="1600" height="900" alt="" loading="lazy" decoding="async" />
+              <img className="scene-photo" src="/assets/meadow/haldi-yellow.webp" width="1600" height="900" alt="" loading="lazy" decoding="async" />
               <div className="scene-copy content-width">
                 <div className="event-body">
                   <h2 id="haldi-heading">{content.haldiName}</h2>
@@ -129,8 +134,8 @@ export default async function WeddingPage() {
           <article className="photo-scene event-scene mehndi-scene" id="mehndi" aria-labelledby="mehndi-heading">
             <div className="photo-stage">
               <picture className="scene-photo">
-                <source media="(max-aspect-ratio: 4/5)" srcSet="/assets/meadow/mehndi-hands-portrait.jpg" width="900" height="1600" />
-                <img src="/assets/meadow/mehndi-hands.jpg" width="1600" height="900" alt="Left and right hands decorated with mehndi, resting beside green flowers and a dholak" loading="lazy" decoding="async" />
+                <source media="(max-aspect-ratio: 4/5)" srcSet="/assets/meadow/mehndi-hands-portrait.webp" width="900" height="1600" />
+                <img src="/assets/meadow/mehndi-hands.webp" width="1600" height="900" alt="Left and right hands decorated with mehndi, resting beside green flowers and a dholak" loading="lazy" decoding="async" />
               </picture>
               <div className="scene-copy content-width">
                 <div className="event-body">
@@ -144,7 +149,7 @@ export default async function WeddingPage() {
           </article>
           <article className="photo-scene event-scene wedding-scene" id="wedding" aria-labelledby="wedding-heading">
             <div className="photo-stage">
-              <img className="scene-photo" src="/assets/meadow/wedding-roses.jpg" width="1600" height="900" alt="" loading="lazy" decoding="async" />
+              <img className="scene-photo" src="/assets/meadow/wedding-roses.webp" width="1600" height="900" alt="" loading="lazy" decoding="async" />
               <div className="scene-copy content-width">
                 <div className="event-body">
                   <h2 id="wedding-heading">{content.weddingName}</h2>
@@ -160,7 +165,7 @@ export default async function WeddingPage() {
         <section className="travel section-space" id="travel" aria-labelledby="travel-heading">
           <div className="travel-layout content-width">
             <header className="travel-destination">
-              <img src="/assets/meadow/kanpur-riverfront.jpg" width="1200" height="800" alt="Illustration of the Ganga riverfront at sunrise" loading="lazy" decoding="async" />
+              <img src="/assets/meadow/kanpur-riverfront.webp" width="1200" height="800" alt="Illustration of the Ganga riverfront at sunrise" loading="lazy" decoding="async" />
               <h2 id="travel-heading">Getting to <span>{content.city}</span></h2>
             </header>
             <div className="travel-guide">
@@ -193,7 +198,7 @@ export default async function WeddingPage() {
         </section>
 
         <section className="rsvp" id="rsvp" aria-labelledby="rsvp-heading">
-          <img className="rsvp-background" src="/assets/meadow/rsvp-namaste.jpg" width="1600" height="1600" alt="Illustration of the couple and their parents greeting guests with namaste in a flower meadow" loading="lazy" decoding="async" />
+          <img className="rsvp-background" src="/assets/meadow/rsvp-namaste.webp" width="1600" height="1600" alt="Illustration of the couple and their parents greeting guests with namaste in a flower meadow" loading="lazy" decoding="async" />
           <div className="rsvp-intro">
             <h2 id="rsvp-heading">RSVP</h2>
             <noscript><p>Please reply to your wedding invitation contact with your name, guest count and the events you’ll attend.</p></noscript>

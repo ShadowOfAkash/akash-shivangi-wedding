@@ -1,6 +1,10 @@
 const journey = document.querySelector(".journey");
 const stage = journey.querySelector(".stage");
 const film = stage.querySelector(".mandap-film");
+const poster = stage.querySelector(".mandap-scene");
+const heroLoading = stage.querySelector(".hero-loading");
+const touchLayout = window.matchMedia("(pointer: coarse)");
+const connection = navigator.connection;
 const skyWash = stage.querySelector(".sky-wash");
 const arrivalShade = stage.querySelector(".arrival-shade");
 const clouds = stage.querySelector(".clouds");
@@ -24,6 +28,17 @@ let frame = 0;
 let filmProgress = 0;
 let navigationHeight = 0;
 
+function finishPosterLoad() {
+  heroLoading.hidden = true;
+  if (!motionPreference.matches) scheduleRender();
+}
+
+if (poster.complete) finishPosterLoad();
+else {
+  poster.addEventListener("load", finishPosterLoad, { once: true });
+  poster.addEventListener("error", finishPosterLoad, { once: true });
+}
+
 invitationWords.forEach((word, index) => word.style.setProperty("--word-index", index));
 
 function clamp(value) {
@@ -44,6 +59,7 @@ function renderPhotoScenes(viewportHeight) {
   const availableHeight = Math.max(1, viewportHeight - navigationHeight);
   for (const { section, panel } of photoScenes) {
     const bounds = section.getBoundingClientRect();
+    if (bounds.bottom <= 0 || bounds.top >= viewportHeight) continue;
     const panelHeight = panel.offsetHeight;
     const reveal = ease(0.18, 0.86, 1 - (bounds.top - navigationHeight) / availableHeight);
     const progress = pinnedProgress(bounds, panelHeight, navigationHeight);
@@ -73,7 +89,12 @@ function showDecodedFrame() {
 
 function render() {
   frame = 0;
-  const progress = pinnedProgress(journey.getBoundingClientRect(), stage.offsetHeight);
+  const bounds = journey.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  if (!touchLayout.matches) renderPhotoScenes(viewportHeight);
+  if (bounds.bottom <= 0 || bounds.top >= viewportHeight) return;
+
+  const progress = pinnedProgress(bounds, stage.offsetHeight);
   const arrivalTime = ease(0.82, 1, progress);
   const titleFade = ease(0.015, 0.13, progress);
   const messageReveal = ease(0.12, 0.23, progress);
@@ -82,6 +103,13 @@ function render() {
   const messageOpacity = messageReveal * (1 - messageFade);
 
   filmProgress = clamp((progress - 0.025) / 0.975);
+  if (filmProgress > 0 && !film.hasAttribute("src") && poster.complete &&
+      !connection?.saveData && !["slow-2g", "2g"].includes(connection?.effectiveType)) {
+    const portrait = window.matchMedia("(max-aspect-ratio: 4/5)").matches;
+    film.preload = "auto";
+    film.src = portrait ? "/assets/mandap-portrait.mp4" : "/assets/mandap-wide.mp4";
+    film.load();
+  }
   if (!filmProgress) film.removeAttribute("data-frame-ready");
   seekFilm();
   skyWash.style.opacity = 1 - messageFade;
@@ -101,7 +129,6 @@ function render() {
   cue.style.visibility = titleFade === 1 ? "hidden" : "visible";
   masthead.style.color = arrivalTime > 0.58 ? "#fff9ed" : "";
   masthead.style.textShadow = arrivalTime > 0.58 ? "0 1px 4px #142115" : "";
-  renderPhotoScenes(stage.offsetHeight);
 }
 
 function scheduleRender() {
@@ -128,6 +155,10 @@ function updateMotionPreference() {
     film.removeEventListener("loadedmetadata", seekFilm);
     film.removeEventListener("seeked", showDecodedFrame);
     film.removeAttribute("data-frame-ready");
+    if (film.hasAttribute("src")) {
+      film.removeAttribute("src");
+      film.load();
+    }
     window.removeEventListener("scroll", scheduleRender);
     window.removeEventListener("resize", scheduleRender);
     cancelAnimationFrame(frame);

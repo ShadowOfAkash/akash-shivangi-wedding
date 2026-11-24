@@ -92,7 +92,7 @@ a { color: inherit; }
 
 .cloud {
   position: absolute;
-  background: url("/assets/wedding-meadow-pheras-4k.jpg") no-repeat;
+  background: url("/assets/mandap-wide.webp") no-repeat;
   /* Screen blending keeps the bright cloud detail from each sky crop. */
   filter: grayscale(1) brightness(.59) contrast(8) sepia(.23);
   mix-blend-mode: screen;
@@ -698,4 +698,61 @@ h2 { font-size: clamp(2.7rem, 5.2vw, 4.75rem); line-height: 1; margin: 0; }
   .hero-city { margin-top: .15rem; }
   h1 { font-size: clamp(1.75rem, min(6vw, 10.5svh), 3.25rem); }
   .scroll-cue { margin-bottom: .75rem; }
+}
+
+.invitation-loading, .hero-loading {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1.2rem;
+  background: var(--paper);
+}
+
+.invitation-loading {
+  min-height: 100svh;
+  font: italic 1.25rem var(--serif);
+  color: var(--ink);
+}
+
+.hero-loading { position: absolute; inset: 0; padding-top: 22svh; }
+
+.wedding-rings {
+  position: relative;
+  display: block;
+  width: 4.1rem;
+  height: 2.7rem;
+}
+
+.wedding-rings i {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 2.55rem;
+  height: 2.55rem;
+  border: 2px solid #997437;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px var(--paper), inset 0 0 0 3px #cead70;
+}
+
+.wedding-rings i + i { left: auto; right: 0; top: 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .wedding-rings i { animation: exchange-rings 1.4s ease-in-out infinite alternate; }
+  .wedding-rings i + i { animation-direction: alternate-reverse; }
+}
+
+@keyframes exchange-rings {
+  from { transform: translateX(-.22rem); }
+  to { transform: translateX(.22rem); }
+}
+
+@media (max-aspect-ratio: 4/5), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .clouds { display: none; }
+}
+
+@media (pointer: coarse) {
+  .has-scroll-journey .photo-scene::after { display: none; }
+  .has-scroll-journey .photo-stage { position: relative; top: auto; }
+  .has-scroll-journey .story-scene .photo-stage { --story-names-rise: 1; --story-date-rise: 1; }
+  .has-scroll-journey .story-copy p { opacity: 1; }
 }

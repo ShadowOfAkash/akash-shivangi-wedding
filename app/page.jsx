@@ -198,10 +198,10 @@ export default async function WeddingPage() {
             <h2 id="rsvp-heading">RSVP</h2>
             <noscript><p>Please reply to your wedding invitation contact with your name, guest count and the events you’ll attend.</p></noscript>
           </div>
-          <form data-first-name={content.firstName} data-second-name={content.secondName} className="rsvp-form" aria-labelledby="rsvp-heading" hidden>
-            <p className="rsvp-instructions">Prepare a reply to send to your wedding invitation contact.</p>
+          <form className="rsvp-form" aria-labelledby="rsvp-heading" hidden>
+            <p className="rsvp-instructions">Send your RSVP directly to the couple.</p>
             <label htmlFor="guest-name">Your name</label>
-            <input name="guest-name" id="guest-name" autoComplete="name" required />
+            <input name="guest-name" id="guest-name" autoComplete="name" maxLength="120" required />
             <fieldset>
               <legend>Will you be there?</legend>
               <label><input type="radio" name="attendance" value="yes" required /> Yes, I’ll be there</label>
@@ -209,19 +209,14 @@ export default async function WeddingPage() {
             </fieldset>
             <fieldset className="attending-fields" hidden disabled>
               <legend>Which events will you attend?</legend>
-              <label><input type="checkbox" name="event" value={content.haldiName} defaultChecked /> {content.haldiName}</label>
-              <label><input type="checkbox" name="event" value={content.mehndiName} defaultChecked /> {content.mehndiName}</label>
-              <label><input type="checkbox" name="event" value={content.weddingName} defaultChecked /> {content.weddingName}</label>
+              <label><input type="checkbox" name="event" value="haldi" defaultChecked /> {content.haldiName}</label>
+              <label><input type="checkbox" name="event" value="mehndi" defaultChecked /> {content.mehndiName}</label>
+              <label><input type="checkbox" name="event" value="wedding" defaultChecked /> {content.weddingName}</label>
               <label className="guest-count" htmlFor="guest-count">Guests including you
-                <input type="number" name="guest-count" id="guest-count" defaultValue="1" min="1" required />
+                <input type="number" name="guest-count" id="guest-count" defaultValue="1" min="1" max="50" required />
               </label>
             </fieldset>
-            <button className="primary-button" type="submit">Prepare RSVP</button>
-            <div className="rsvp-reply" hidden>
-              <label htmlFor="reply">Your RSVP message</label>
-              <textarea id="reply" rows="4" readOnly></textarea>
-              <button type="button" className="text-button">Copy message</button>
-            </div>
+            <button className="primary-button" type="submit">Send RSVP</button>
             <p className="rsvp-status" role="status"></p>
           </form>
         </section>

@@ -1,60 +1,58 @@
 const rsvpForm = document.querySelector(".rsvp-form");
 const attendingFields = rsvpForm.querySelector(".attending-fields");
-const replyPanel = rsvpForm.querySelector(".rsvp-reply");
-const reply = replyPanel.querySelector("textarea");
-const copyReply = replyPanel.querySelector("button");
 const replyStatus = rsvpForm.querySelector(".rsvp-status");
-const coupleNames = `${rsvpForm.dataset.firstName} and ${rsvpForm.dataset.secondName}`;
-const eventNames = new Intl.ListFormat("en", { type: "conjunction" });
+const submitButton = rsvpForm.querySelector('button[type="submit"]');
+let submissionId;
 
 function updateRsvpFields() {
   const attending = rsvpForm.elements.attendance.value === "yes";
   attendingFields.hidden = !attending;
   attendingFields.disabled = !attending;
-  replyPanel.hidden = true;
   replyStatus.textContent = "";
+  submissionId = undefined;
 }
 
 updateRsvpFields();
 rsvpForm.hidden = false;
 rsvpForm.addEventListener("input", updateRsvpFields);
 
-rsvpForm.addEventListener("submit", (event) => {
+rsvpForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (submitButton.disabled) return;
   const fields = new FormData(rsvpForm);
   const name = fields.get("guest-name").trim();
-  const attending = fields.get("attendance") === "yes";
+  const attendance = fields.get("attendance");
   const events = fields.getAll("event");
   const guests = Number(fields.get("guest-count"));
 
   if (!name) {
-    replyStatus.textContent = "Enter your name to prepare your reply.";
+    replyStatus.textContent = "Enter your name to send your RSVP.";
     rsvpForm.elements["guest-name"].focus();
     return;
   }
-
-  if (attending && events.length === 0) {
+  if (attendance === "yes" && events.length === 0) {
     replyStatus.textContent = "Choose at least one event you’ll attend.";
     attendingFields.querySelector("input").focus();
     return;
   }
 
-  reply.value = attending
-    ? `Hi! This is ${name}. I’ll be joining ${coupleNames} for ${eventNames.format(events)}. Please count ${guests} ${guests === 1 ? "guest" : "guests"}, including me. Thank you!`
-    : `Hi! This is ${name}. I won’t be able to attend ${coupleNames}’s wedding. Sending them and both families our best wishes!`;
-  replyPanel.hidden = false;
-  replyStatus.textContent = "Your reply is ready to copy and send.";
-  reply.focus();
-});
-
-copyReply.addEventListener("click", async () => {
+  submissionId ??= crypto.randomUUID();
+  const controls = [...rsvpForm.elements].filter(control => !control.disabled);
+  controls.forEach(control => { control.disabled = true; });
+  replyStatus.textContent = "Sending your RSVP…";
   try {
-    await navigator.clipboard.writeText(reply.value);
-    replyStatus.textContent = "Message copied.";
-  } catch {
-    reply.focus();
-    reply.select();
-    replyStatus.textContent = "The message is selected. Copy it to share with your invitation contact.";
+    const result = await fetch("/api/rsvp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: submissionId, name, attendance, events, guests }),
+    });
+    const data = await result.json();
+    if (!result.ok || !data.success) throw new Error(data.error || "Your RSVP could not be confirmed.");
+    replyStatus.textContent = "Thank you! Your RSVP was sent.";
+    submitButton.textContent = "RSVP sent";
+  } catch (error) {
+    controls.forEach(control => { control.disabled = false; });
+    replyStatus.textContent = error.message || "Please try again.";
   }
 });
 

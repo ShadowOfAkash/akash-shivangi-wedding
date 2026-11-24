@@ -4,6 +4,7 @@ const replyPanel = rsvpForm.querySelector(".rsvp-reply");
 const reply = replyPanel.querySelector("textarea");
 const copyReply = replyPanel.querySelector("button");
 const replyStatus = rsvpForm.querySelector(".rsvp-status");
+const coupleNames = `${rsvpForm.dataset.firstName} and ${rsvpForm.dataset.secondName}`;
 const eventNames = new Intl.ListFormat("en", { type: "conjunction" });
 
 function updateRsvpFields() {
@@ -39,8 +40,8 @@ rsvpForm.addEventListener("submit", (event) => {
   }
 
   reply.value = attending
-    ? `Hi! This is ${name}. I’ll be joining Akash and Shivangi for ${eventNames.format(events)}. Please count ${guests} ${guests === 1 ? "guest" : "guests"}, including me. Thank you!`
-    : `Hi! This is ${name}. I won’t be able to attend Akash and Shivangi’s wedding. Sending them and both families our best wishes!`;
+    ? `Hi! This is ${name}. I’ll be joining ${coupleNames} for ${eventNames.format(events)}. Please count ${guests} ${guests === 1 ? "guest" : "guests"}, including me. Thank you!`
+    : `Hi! This is ${name}. I won’t be able to attend ${coupleNames}’s wedding. Sending them and both families our best wishes!`;
   replyPanel.hidden = false;
   replyStatus.textContent = "Your reply is ready to copy and send.";
   reply.focus();

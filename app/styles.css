@@ -92,7 +92,7 @@ a { color: inherit; }
 
 .cloud {
   position: absolute;
-  background: url("assets/wedding-meadow-pheras-4k.jpg") no-repeat;
+  background: url("/assets/wedding-meadow-pheras-4k.jpg") no-repeat;
   /* Screen blending keeps the bright cloud detail from each sky crop. */
   filter: grayscale(1) brightness(.59) contrast(8) sepia(.23);
   mix-blend-mode: screen;

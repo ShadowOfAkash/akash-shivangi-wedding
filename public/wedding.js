@@ -170,32 +170,32 @@ updateNavigationHeight();
 new ResizeObserver(updateNavigationHeight).observe(weddingNav);
 updateMotionPreference();
 
-const fluteMusic = document.querySelector("#wedding-flute");
+const weddingMusic = document.querySelector("#wedding-music");
 const musicToggle = document.querySelector(".music-toggle");
 const musicIcon = musicToggle.querySelector(".music-icon");
 const musicLabel = musicToggle.querySelector(".music-label");
 
 function reflectMusicPlayback() {
-  const playing = !fluteMusic.paused;
+  const playing = !weddingMusic.paused;
   musicToggle.toggleAttribute("data-playing", playing);
-  musicToggle.setAttribute("aria-label", playing ? "Pause flute music" : "Play flute music");
+  musicToggle.setAttribute("aria-label", playing ? "Pause music" : "Play music");
   musicIcon.textContent = playing ? "Ⅱ" : "♪";
-  musicLabel.textContent = playing ? "Pause flute" : "Play flute";
+  musicLabel.textContent = playing ? "Pause music" : "Play music";
 }
 
-fluteMusic.volume = 0.4;
-fluteMusic.addEventListener("play", reflectMusicPlayback);
-fluteMusic.addEventListener("pause", reflectMusicPlayback);
-fluteMusic.addEventListener("error", () => {
+weddingMusic.volume = 0.4;
+weddingMusic.addEventListener("play", reflectMusicPlayback);
+weddingMusic.addEventListener("pause", reflectMusicPlayback);
+weddingMusic.addEventListener("error", () => {
   musicToggle.disabled = true;
-  musicToggle.setAttribute("aria-label", "Flute music unavailable");
+  musicToggle.setAttribute("aria-label", "Music unavailable");
   musicLabel.textContent = "Music unavailable";
 });
 musicToggle.addEventListener("click", () => {
-  if (fluteMusic.paused) {
-    fluteMusic.play().catch(reflectMusicPlayback);
+  if (weddingMusic.paused) {
+    weddingMusic.play().catch(reflectMusicPlayback);
   } else {
-    fluteMusic.pause();
+    weddingMusic.pause();
   }
 });
 musicToggle.hidden = false;

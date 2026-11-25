@@ -275,12 +275,12 @@ export default async function WeddingPage() {
         <p>{content.firstFullName} and {content.secondFullName}</p>
         <a href="#top">Back to the invitation</a>
       </footer>
-      <audio id="wedding-flute" src="/assets/wedding-flute.mp3" preload="none" loop></audio>
-      <button className="music-toggle" type="button" aria-label="Play flute music" hidden>
+      <audio id="wedding-music" src="https://akashsonali.vercel.app/music.mp3" preload="none" loop></audio>
+      <button className="music-toggle" type="button" aria-label="Play music" hidden>
         <span className="music-icon" aria-hidden="true">♪</span>
-        <span className="music-label" aria-hidden="true">Play flute</span>
+        <span className="music-label" aria-hidden="true">Play music</span>
       </button>
-      <Script src="/wedding.js" strategy="afterInteractive" />
+      <Script src="/wedding.js?v=15" strategy="afterInteractive" />
       <Script src="/guest-guide.js" strategy="afterInteractive" />
     </>
   );

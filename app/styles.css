@@ -765,8 +765,15 @@ html:has(.invitation-intro) { overflow: hidden; }
   background: radial-gradient(ellipse at 50% 30%, #fff9ba 12%, #ffbd4b 29%, #8b4d2c 51%, #b97b48 68%, #f2c577 80%);
 }
 
-[data-phase="lanterns"] .intro-counter { opacity: 0; transition: opacity .28s ease-in; }
-.lantern-sky { position: absolute; inset: 0; overflow: hidden; }
+.lantern-sky {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 100;
+  overflow: hidden;
+  pointer-events: none;
+}
 .flying-lantern {
   position: absolute;
   top: 100%;

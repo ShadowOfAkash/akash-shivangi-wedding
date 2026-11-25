@@ -80,29 +80,29 @@ function OpeningSequence() {
     }
     function pageReady() {
       const invitation = document.getElementById("top");
-      return invitation && !invitation.closest("[hidden]");
+      return invitation && !invitation.closest("[hidden]") && invitation.querySelector(".mandap-scene")?.complete;
     }
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [phase]);
 
   useEffect(() => {
-    if (phase !== "done") return;
+    if (phase !== "lanterns") return;
     document.getElementById("invitation-page").inert = false;
     const target = document.getElementById(window.location.hash.slice(1));
     target?.scrollIntoView({ behavior: "instant" });
   }, [phase]);
 
   if (phase === "done") return null;
+  if (phase === "lanterns") return <LanternFlight onComplete={() => setPhase("done")} />;
   return (
-    <div className="invitation-intro" data-phase={phase} role="status" aria-label="Opening your wedding invitation">
+    <div className="invitation-intro" role="status" aria-label="Opening your wedding invitation">
       <div className="intro-counter" aria-hidden="true">
         <i className="sky-lantern intro-lantern" />
         <span className="intro-caption">Opening your invitation</span>
         <div className="intro-number"><span ref={percentage}>0</span><span>%</span></div>
         <div className="intro-track"><i ref={track} /></div>
       </div>
-      {phase === "lanterns" && <LanternFlight onComplete={() => setPhase("done")} />}
     </div>
   );
 }

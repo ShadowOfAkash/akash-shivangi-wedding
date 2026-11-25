@@ -769,26 +769,33 @@ html:has(.invitation-intro) { overflow: hidden; }
   inset: 0 0 auto;
   height: 100vh;
   height: 100dvh;
-  z-index: 100;
+  container-type: size;
   overflow: hidden;
   pointer-events: none;
 }
+.scenery .lantern-sky { height: 100%; }
+body > .lantern-sky { z-index: 3; }
 .flying-lantern {
   position: absolute;
-  top: 50%;
+  /* The ridge is about 72% down both posters. Account for the centered cover crop. */
+  --poster-height: max(100cqh, calc(100cqw * 9 / 16));
+  --ridge: min(87cqh, calc(50cqh + .22 * var(--poster-height)));
+  top: calc(var(--ridge) - var(--above-ridge));
   left: var(--left);
   animation: float-lantern var(--duration) linear var(--delay) both;
+}
+@media (max-aspect-ratio: 4/5) {
+  .flying-lantern { --poster-height: max(100cqh, calc(100cqw * 5 / 4)); }
 }
 @keyframes float-lantern {
   from { opacity: 0; transform: translate3d(-50%, -50%, 0) rotate(var(--tilt)); }
   28%, 65% { opacity: var(--peak-opacity); }
-  to { opacity: 0; transform: translate3d(calc(-50% + var(--drift)), calc(-50dvh - 100%), 0) rotate(calc(-1 * var(--tilt))); }
+  to { opacity: 0; transform: translate3d(calc(-50% + var(--drift)), calc(-50% - var(--rise)), 0) rotate(calc(-1 * var(--tilt))); }
 }
 @media (prefers-reduced-motion: reduce) {
   .flying-lantern {
-    top: var(--rest-height);
     transform: translate(-50%, -50%) rotate(var(--tilt));
     animation: lantern-glow .75s ease both;
   }
-  @keyframes lantern-glow { 0%, 100% { opacity: 0; } 40%, 65% { opacity: .85; } }
+  @keyframes lantern-glow { 0%, 100% { opacity: 0; } 40%, 65% { opacity: var(--peak-opacity); } }
 }

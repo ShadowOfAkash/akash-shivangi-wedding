@@ -1,5 +1,6 @@
 "use client";
 
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -8,24 +9,30 @@ const crossfadeTime = 180;
 
 function createLanterns() {
   const compact = window.matchMedia("(max-width: 650px)").matches;
-  const count = compact ? 56 : 112;
-  const maxSize = compact ? 62 : 84;
   const random = (min, max) => min + Math.random() * (max - min);
 
-  // Spread launches across the sky. Each lantern gets an independent flight.
-  return Array.from({ length: count }, (_, index) => {
-    const size = 12 + (maxSize - 12) * Math.random() ** 1.6;
-    return {
-      "--left": `${(index + Math.random()) / count * 100}%`,
-      "--size": `${size}px`,
-      "--duration": `${random(.9, 1.2)}s`,
-      "--delay": `${random(0, .15)}s`,
-      "--drift": `${random(-6, 6)}vw`,
-      "--tilt": `${random(-9, 9)}deg`,
-      "--rest-height": `${random(5, 95)}%`,
-      "--peak-opacity": 0.55 + 0.45 * size / maxSize,
-      zIndex: Math.round(size),
-    };
+  // Origins are measured from the ridge in the hero photograph. Farther
+  // lanterns stay close to the mandap and cover less distance on screen.
+  const layers = [
+    { count: compact ? 3 : 6, x: [31, 69], aboveRidge: [3, 9], size: [5, 10], rise: [4, 9], drift: 2, opacity: .55, duration: [1.3, 1.55] },
+    { count: compact ? 2 : 4, x: [17, 83], aboveRidge: [11, 21], size: [12, 20], rise: [20, 42], drift: 6, opacity: .73, duration: [1.1, 1.4] },
+    { count: compact ? 2 : 3, x: [8, 92], aboveRidge: [22, 34], size: [25, 39], rise: [60, 105], drift: 10, opacity: .9, duration: [1, 1.25] },
+  ];
+
+  return layers.flatMap(layer => {
+    const [left, right] = layer.x;
+    const lane = (right - left) / layer.count;
+    return Array.from({ length: layer.count }, (_, index) => ({
+      "--left": `${left + (index + random(.1, .9)) * lane}%`,
+      "--above-ridge": `${random(...layer.aboveRidge)}cqh`,
+      "--size": `${random(...layer.size) * (compact ? .8 : 1)}px`,
+      "--rise": `${random(...layer.rise)}px`,
+      "--duration": `${random(...layer.duration)}s`,
+      "--delay": `${random(0, .16)}s`,
+      "--drift": `${random(-layer.drift, layer.drift)}px`,
+      "--tilt": `${random(-8, 8)}deg`,
+      "--peak-opacity": layer.opacity,
+    }));
   });
 }
 
@@ -38,13 +45,15 @@ function LanternFlight({ onComplete }) {
     finished.current.add(id);
     if (finished.current.size === lanterns.length) onComplete();
   }
-  return (
+  const sky = (
     <div className="lantern-sky" aria-hidden="true" onAnimationEnd={finishFlight}>
       {lanterns.map((style, index) => (
         <i key={index} className="sky-lantern flying-lantern" data-lantern={index} style={style} />
       ))}
     </div>
   );
+  const scenery = document.querySelector(".journey .scenery");
+  return scenery ? createPortal(sky, scenery) : sky;
 }
 
 export default function InvitationIntro() {

@@ -2,7 +2,6 @@ const journey = document.querySelector(".journey");
 const stage = journey.querySelector(".stage");
 const film = stage.querySelector(".mandap-film");
 const poster = stage.querySelector(".mandap-scene");
-const heroLoading = stage.querySelector(".hero-loading");
 const touchLayout = window.matchMedia("(pointer: coarse)");
 const connection = navigator.connection;
 const skyWash = stage.querySelector(".sky-wash");
@@ -29,7 +28,6 @@ let filmProgress = 0;
 let navigationHeight = 0;
 
 function finishPosterLoad() {
-  heroLoading.hidden = true;
   if (!motionPreference.matches) scheduleRender();
 }
 

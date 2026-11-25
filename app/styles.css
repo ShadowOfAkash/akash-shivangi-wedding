@@ -700,52 +700,6 @@ h2 { font-size: clamp(2.7rem, 5.2vw, 4.75rem); line-height: 1; margin: 0; }
   .scroll-cue { margin-bottom: .75rem; }
 }
 
-.invitation-loading, .hero-loading {
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: 1.2rem;
-  background: var(--paper);
-}
-
-.invitation-loading {
-  min-height: 100svh;
-  font: italic 1.25rem var(--serif);
-  color: var(--ink);
-}
-
-.hero-loading { position: absolute; inset: 0; padding-top: 22svh; }
-
-.wedding-rings {
-  position: relative;
-  display: block;
-  width: 4.1rem;
-  height: 2.7rem;
-}
-
-.wedding-rings i {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 2.55rem;
-  height: 2.55rem;
-  border: 2px solid #997437;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 2px var(--paper), inset 0 0 0 3px #cead70;
-}
-
-.wedding-rings i + i { left: auto; right: 0; top: 0; }
-
-@media (prefers-reduced-motion: no-preference) {
-  .wedding-rings i { animation: exchange-rings 1.4s ease-in-out infinite alternate; }
-  .wedding-rings i + i { animation-direction: alternate-reverse; }
-}
-
-@keyframes exchange-rings {
-  from { transform: translateX(-.22rem); }
-  to { transform: translateX(.22rem); }
-}
-
 @media (max-aspect-ratio: 4/5), (pointer: coarse), (prefers-reduced-motion: reduce) {
   .clouds { display: none; }
 }
@@ -755,4 +709,84 @@ h2 { font-size: clamp(2.7rem, 5.2vw, 4.75rem); line-height: 1; margin: 0; }
   .has-scroll-journey .photo-stage { position: relative; top: auto; }
   .has-scroll-journey .story-scene .photo-stage { --story-names-rise: 1; --story-date-rise: 1; }
   .has-scroll-journey .story-copy p { opacity: 1; }
+}
+
+html:has(.invitation-intro) { overflow: hidden; }
+.invitation-intro ~ #invitation-page { opacity: 0; }
+
+.invitation-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  color: #fff4d9;
+  background: radial-gradient(ellipse at 50% 47%, #415365, #344454 62%, #2d3c4b);
+}
+
+.intro-counter { display: grid; justify-items: center; }
+.intro-caption {
+  margin-block: 1.4rem .35rem;
+  font: 500 .72rem/1.4 system-ui, sans-serif;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+.intro-number {
+  font: 400 clamp(6rem, 18vmin, 12rem)/1.05 var(--serif);
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: -.065em;
+}
+.intro-number > :last-child { margin-left: .09em; font-size: .47em; color: #eece99; }
+.intro-track { width: 8rem; height: 2px; margin-top: 1rem; background: #fff1; }
+.intro-track i { display: block; height: 100%; background: #edbf78; transform: scaleX(0); transform-origin: left; }
+
+.diya {
+  position: relative;
+  display: block;
+  width: min(5.5vw, 7.6vh, 5rem);
+  aspect-ratio: 1.4;
+  background: radial-gradient(ellipse at 50% 40%, #ffc66363, transparent 66%);
+}
+.diya::before, .diya::after { content: ""; position: absolute; }
+.diya::before {
+  left: 44%; bottom: 33%; width: 20%; height: 50%;
+  border-radius: 92% 8% 75% 45%;
+  transform: rotate(-12deg);
+  background: radial-gradient(ellipse at 48% 78%, #fffbe2 20%, #ffdb83 44%, #ffad4f 70%);
+}
+.diya::after {
+  inset: 60% 6% 7%;
+  border-radius: 50% 50% 46% 46% / 17% 17% 88% 88%;
+  background: radial-gradient(ellipse 53% 20% at 50% 9%, #875232 68%, #f7d88b 84%, transparent 98%),
+    linear-gradient(178deg, #f6ca83 8%, #c58142 43%, #8e5239 73%, #dda565);
+}
+.intro-diya { width: 4.1rem; }
+
+[data-phase="lamps"] .intro-counter { opacity: 0; transition: opacity .28s ease-in; }
+.diya-field {
+  position: absolute;
+  inset: 100% -2% auto;
+  height: 100%;
+  display: grid;
+  grid-template-rows: repeat(8, 1fr);
+  animation: lift-diyas 3s cubic-bezier(.35, .13, .55, .89) both;
+}
+.diya-row { display: flex; justify-content: space-around; align-items: center; }
+.diya-row:nth-child(even) { transform: translateX(2%); }
+.diya-row .diya:nth-child(3n) { transform: translateY(12%) scale(.8); }
+.diya-row .diya:nth-child(3n + 1) { transform: translateY(-14%) scale(1.1); }
+
+@keyframes lift-diyas {
+  from { transform: translateY(0); }
+  to { transform: translateY(-202%); }
+}
+@media (max-width: 650px) {
+  .diya-row .diya:nth-child(n + 8) { display: none; }
+  .diya-row .diya { width: min(12vw, 8vh); }
+  .diya-row:nth-child(even) { transform: translateX(4%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .diya-field { inset-block-start: 0; animation: still-diyas .7s ease-in-out both; }
+  @keyframes still-diyas { 0%, 100% { opacity: 0; } 45%, 65% { opacity: 1; } }
 }

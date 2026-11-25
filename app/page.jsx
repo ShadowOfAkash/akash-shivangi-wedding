@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import Script from "next/script";
-import { WeddingRings } from "./loading";
 import { getWeddingContent } from "./content";
 
 export const dynamic = "force-dynamic";
@@ -28,7 +27,6 @@ export default async function WeddingPage() {
           <span id="flight" className="flight-marker" aria-hidden="true"></span>
           <div className="stage">
             <div className="scenery">
-              <div className="hero-loading"><WeddingRings /></div>
               <picture>
                 <source media="(max-aspect-ratio: 4/5)" srcSet="/assets/mandap-portrait.webp" />
                 <img className="mandap-scene" src="/assets/mandap-wide.webp" fetchPriority="high" decoding="async"

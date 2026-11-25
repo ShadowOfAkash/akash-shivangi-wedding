@@ -1,3 +1,4 @@
+import MandapPoster from "./mandap-poster";
 import { Fragment } from "react";
 import Script from "next/script";
 import { getWeddingContent } from "./content";
@@ -27,11 +28,7 @@ export default async function WeddingPage() {
           <span id="flight" className="flight-marker" aria-hidden="true"></span>
           <div className="stage">
             <div className="scenery">
-              <picture>
-                <source media="(max-aspect-ratio: 4/5)" srcSet="/assets/mandap-portrait.webp" />
-                <img className="mandap-scene" src="/assets/mandap-wide.webp" fetchPriority="high" decoding="async"
-                  alt="A flower-lined meadow path leading to a distant mandap where the bride follows the groom around the havan fire." />
-              </picture>
+              <MandapPoster />
               <video className="mandap-film" preload="none" muted playsInline aria-hidden="true"></video>
               <div className="clouds" aria-hidden="true">
                 <div className="cloud cloud-near"></div>

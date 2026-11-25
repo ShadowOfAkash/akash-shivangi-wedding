@@ -712,7 +712,6 @@ h2 { font-size: clamp(2.7rem, 5.2vw, 4.75rem); line-height: 1; margin: 0; }
 }
 
 html:has(.invitation-intro) { overflow: hidden; }
-.invitation-intro ~ #invitation-page { opacity: 0; }
 
 .invitation-intro {
   position: fixed;

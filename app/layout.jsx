@@ -8,9 +8,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <noscript><style>{`
-          .invitation-intro { display: none !important; }
+          .invitation-intro, .invitation-placeholder { display: none !important; }
           html:has(.invitation-intro) { overflow: auto; }
-          #invitation-page { opacity: 1 !important; }
           div[hidden]:has(main#top) { display: block !important; }
         `}</style></noscript>
         <InvitationIntro />

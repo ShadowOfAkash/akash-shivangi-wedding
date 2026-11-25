@@ -1,4 +1,5 @@
-// The persistent layout owns the introduction while the invitation streams in.
+import MandapPoster from "./mandap-poster";
+
 export default function Loading() {
-  return null;
+  return <div className="stage invitation-placeholder" aria-hidden="true"><MandapPoster /></div>;
 }

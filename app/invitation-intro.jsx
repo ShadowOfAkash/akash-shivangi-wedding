@@ -3,7 +3,9 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-const loadingTime = 5000;
+const counterTime = 1100;
+const crossfadeTime = 180;
+
 function createLanterns() {
   const compact = window.matchMedia("(max-width: 650px)").matches;
   const count = compact ? 56 : 112;
@@ -16,8 +18,8 @@ function createLanterns() {
     return {
       "--left": `${(index + Math.random()) / count * 100}%`,
       "--size": `${size}px`,
-      "--duration": `${random(1.3, 2.2)}s`,
-      "--delay": `${random(0, 1.6)}s`,
+      "--duration": `${random(.9, 1.2)}s`,
+      "--delay": `${random(0, .15)}s`,
       "--drift": `${random(-6, 6)}vw`,
       "--tilt": `${random(-9, 9)}deg`,
       "--rest-height": `${random(5, 95)}%`,
@@ -52,6 +54,7 @@ export default function InvitationIntro() {
 
 function OpeningSequence() {
   const [phase, setPhase] = useState("counting");
+  const overlay = useRef(null);
   const percentage = useRef(null);
   const track = useRef(null);
 
@@ -63,24 +66,22 @@ function OpeningSequence() {
 
   useEffect(() => {
     if (phase !== "counting") return;
-    const start = performance.getEntriesByName("first-contentful-paint")[0]?.startTime ?? performance.now();
+    const mountedAt = performance.now();
+    let firstPaint;
     let last = -1;
     let frame;
     function tick(now) {
-      const elapsed = Math.max(0, now - start);
-      const ready = elapsed >= loadingTime && pageReady();
-      const value = ready ? 100 : Math.min(99, Math.floor(elapsed / loadingTime * 100));
+      firstPaint ??= performance.getEntriesByName("first-contentful-paint")[0]?.startTime;
+      const elapsed = Math.max(0, now - (firstPaint ?? mountedAt));
+      const value = Math.min(100, Math.floor(elapsed / (counterTime - crossfadeTime) * 100));
       if (value !== last) {
         percentage.current.textContent = String(value);
         track.current.style.transform = `scaleX(${value / 100})`;
         last = value;
       }
-      if (ready) setPhase("lanterns");
+      if (value === 100) overlay.current.style.opacity = Math.max(0, (counterTime - elapsed) / crossfadeTime);
+      if (elapsed >= counterTime) setPhase("lanterns");
       else frame = requestAnimationFrame(tick);
-    }
-    function pageReady() {
-      const invitation = document.getElementById("top");
-      return invitation && !invitation.closest("[hidden]") && invitation.querySelector(".mandap-scene")?.complete;
     }
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
@@ -96,7 +97,7 @@ function OpeningSequence() {
   if (phase === "done") return null;
   if (phase === "lanterns") return <LanternFlight onComplete={() => setPhase("done")} />;
   return (
-    <div className="invitation-intro" role="status" aria-label="Opening your wedding invitation">
+    <div className="invitation-intro" ref={overlay} role="status" aria-label="Opening your wedding invitation">
       <div className="intro-counter" aria-hidden="true">
         <i className="sky-lantern intro-lantern" />
         <span className="intro-caption">Opening your invitation</span>

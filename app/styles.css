@@ -741,52 +741,48 @@ html:has(.invitation-intro) { overflow: hidden; }
 .intro-track { width: 8rem; height: 2px; margin-top: 1rem; background: #fff1; }
 .intro-track i { display: block; height: 100%; background: #edbf78; transform: scaleX(0); transform-origin: left; }
 
-.diya {
-  position: relative;
+.sky-lantern {
   display: block;
-  width: min(5.5vw, 7.6vh, 5rem);
-  aspect-ratio: 1.4;
-  background: radial-gradient(ellipse at 50% 40%, #ffc66363, transparent 66%);
+  position: relative;
+  width: var(--size, 2.75rem);
+  aspect-ratio: .79;
+  background: radial-gradient(ellipse at 50% 66%, #ffc06970, #ffb56420 45%, transparent 73%);
 }
-.diya::before, .diya::after { content: ""; position: absolute; }
-.diya::before {
-  left: 44%; bottom: 33%; width: 20%; height: 50%;
-  border-radius: 92% 8% 75% 45%;
-  transform: rotate(-12deg);
-  background: radial-gradient(ellipse at 48% 78%, #fffbe2 20%, #ffdb83 44%, #ffad4f 70%);
+.sky-lantern::before, .sky-lantern::after { content: ""; position: absolute; }
+.sky-lantern::before {
+  inset: 3% 9% 12%;
+  clip-path: polygon(8% 7%, 20% 3%, 45% 1%, 74% 2%, 91% 6%, 97% 13%,
+    100% 31%, 96% 55%, 85% 79%, 73% 98%, 57% 100%, 33% 99%,
+    21% 95%, 9% 68%, 2% 44%, 1% 23%, 3% 12%);
+  background:
+    linear-gradient(83deg, transparent 29%, #94422138 30%, transparent 33%),
+    linear-gradient(98deg, transparent 69%, #a2482333 70%, transparent 73%),
+    radial-gradient(ellipse at 50% 90%, #fff4ae 4%, #ffd16f 33%, #f7a252 60%, #d87745 86%, #ae5537);
 }
-.diya::after {
-  inset: 60% 6% 7%;
-  border-radius: 50% 50% 46% 46% / 17% 17% 88% 88%;
-  background: radial-gradient(ellipse 53% 20% at 50% 9%, #875232 68%, #f7d88b 84%, transparent 98%),
-    linear-gradient(178deg, #f6ca83 8%, #c58142 43%, #8e5239 73%, #dda565);
+.sky-lantern::after {
+  left: 29%; bottom: 10%; width: 43%; height: 8%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 30%, #fff9ba 12%, #ffbd4b 29%, #8b4d2c 51%, #b97b48 68%, #f2c577 80%);
 }
-.intro-diya { width: 4.1rem; }
 
-[data-phase="lamps"] .intro-counter { opacity: 0; transition: opacity .28s ease-in; }
-.diya-field {
+[data-phase="lanterns"] .intro-counter { opacity: 0; transition: opacity .28s ease-in; }
+.lantern-sky { position: absolute; inset: 0; overflow: hidden; }
+.flying-lantern {
   position: absolute;
-  inset: 100% -2% auto;
-  height: 100%;
-  display: grid;
-  grid-template-rows: repeat(8, 1fr);
-  animation: lift-diyas 3s cubic-bezier(.35, .13, .55, .89) both;
+  top: 100%;
+  left: var(--left);
+  animation: float-lantern var(--duration) ease-in-out var(--delay) both;
 }
-.diya-row { display: flex; justify-content: space-around; align-items: center; }
-.diya-row:nth-child(even) { transform: translateX(2%); }
-.diya-row .diya:nth-child(3n) { transform: translateY(12%) scale(.8); }
-.diya-row .diya:nth-child(3n + 1) { transform: translateY(-14%) scale(1.1); }
-
-@keyframes lift-diyas {
-  from { transform: translateY(0); }
-  to { transform: translateY(-202%); }
-}
-@media (max-width: 650px) {
-  .diya-row .diya:nth-child(n + 8) { display: none; }
-  .diya-row .diya { width: min(12vw, 8vh); }
-  .diya-row:nth-child(even) { transform: translateX(4%); }
+@keyframes float-lantern {
+  from { transform: translate3d(-50%, 12%, 0) rotate(var(--tilt)); }
+  48% { transform: translate3d(calc(-50% + var(--drift)), -48dvh, 0) rotate(calc(-1 * var(--tilt))); }
+  to { transform: translate3d(calc(-50% + .6 * var(--drift)), calc(-100dvh - 150%), 0) rotate(var(--tilt)); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .diya-field { inset-block-start: 0; animation: still-diyas .7s ease-in-out both; }
-  @keyframes still-diyas { 0%, 100% { opacity: 0; } 45%, 65% { opacity: 1; } }
+  .flying-lantern {
+    top: var(--rest-height);
+    transform: translate(-50%, -50%) rotate(var(--tilt));
+    animation: lantern-glow .75s ease both;
+  }
+  @keyframes lantern-glow { 0%, 100% { opacity: 0; } 40%, 65% { opacity: .85; } }
 }

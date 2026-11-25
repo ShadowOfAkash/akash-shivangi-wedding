@@ -4,8 +4,46 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const loadingTime = 5000;
-const rows = Array.from({ length: 8 }, (_, index) => index);
-const lamps = Array.from({ length: 14 }, (_, index) => index);
+function createLanterns() {
+  const compact = window.matchMedia("(max-width: 650px)").matches;
+  const count = compact ? 56 : 112;
+  const maxSize = compact ? 62 : 84;
+  const random = (min, max) => min + Math.random() * (max - min);
+
+  // Spread launches across the sky. Each lantern gets an independent flight.
+  return Array.from({ length: count }, (_, index) => {
+    const size = 12 + (maxSize - 12) * Math.random() ** 1.6;
+    return {
+      "--left": `${(index + Math.random()) / count * 100}%`,
+      "--size": `${size}px`,
+      "--duration": `${random(2.2, 4.4)}s`,
+      "--delay": `${random(0, 1.6)}s`,
+      "--drift": `${random(-6, 6)}vw`,
+      "--tilt": `${random(-9, 9)}deg`,
+      "--rest-height": `${random(5, 95)}%`,
+      opacity: 0.55 + 0.45 * size / maxSize,
+      zIndex: Math.round(size),
+    };
+  });
+}
+
+function LanternFlight({ onComplete }) {
+  const [lanterns] = useState(createLanterns);
+  const finished = useRef(new Set());
+  function finishFlight(event) {
+    const id = event.target.dataset.lantern;
+    if (id === undefined) return;
+    finished.current.add(id);
+    if (finished.current.size === lanterns.length) onComplete();
+  }
+  return (
+    <div className="lantern-sky" aria-hidden="true" onAnimationEnd={finishFlight}>
+      {lanterns.map((style, index) => (
+        <i key={index} className="sky-lantern flying-lantern" data-lantern={index} style={style} />
+      ))}
+    </div>
+  );
+}
 
 export default function InvitationIntro() {
   const pathname = usePathname();
@@ -37,7 +75,7 @@ function OpeningSequence() {
         track.current.style.transform = `scaleX(${value / 100})`;
         last = value;
       }
-      if (ready) setPhase("lamps");
+      if (ready) setPhase("lanterns");
       else frame = requestAnimationFrame(tick);
     }
     function pageReady() {
@@ -59,22 +97,12 @@ function OpeningSequence() {
   return (
     <div className="invitation-intro" data-phase={phase} role="status" aria-label="Opening your wedding invitation">
       <div className="intro-counter" aria-hidden="true">
-        <i className="diya intro-diya" />
+        <i className="sky-lantern intro-lantern" />
         <span className="intro-caption">Opening your invitation</span>
         <div className="intro-number"><span ref={percentage}>0</span><span>%</span></div>
         <div className="intro-track"><i ref={track} /></div>
       </div>
-      {phase === "lamps" && (
-        <div className="diya-field" aria-hidden="true" onAnimationEnd={event => {
-          if (event.target === event.currentTarget) setPhase("done");
-        }}>
-          {rows.map(row => (
-            <div className="diya-row" key={row}>
-              {lamps.map(lamp => <i className="diya" key={lamp} />)}
-            </div>
-          ))}
-        </div>
-      )}
+      {phase === "lanterns" && <LanternFlight onComplete={() => setPhase("done")} />}
     </div>
   );
 }

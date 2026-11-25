@@ -1,3 +1,4 @@
+import LanternSky from "./lantern-sky";
 import MandapPoster from "./mandap-poster";
 import { Fragment } from "react";
 import Script from "next/script";
@@ -36,6 +37,7 @@ export default async function WeddingPage() {
               </div>
               <div className="sky-wash"></div>
               <div className="arrival-shade"></div>
+              <LanternSky />
             </div>
 
             <header className="masthead">

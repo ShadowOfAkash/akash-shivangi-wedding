@@ -16,12 +16,12 @@ function createLanterns() {
     return {
       "--left": `${(index + Math.random()) / count * 100}%`,
       "--size": `${size}px`,
-      "--duration": `${random(2.2, 4.4)}s`,
+      "--duration": `${random(1.3, 2.2)}s`,
       "--delay": `${random(0, 1.6)}s`,
       "--drift": `${random(-6, 6)}vw`,
       "--tilt": `${random(-9, 9)}deg`,
       "--rest-height": `${random(5, 95)}%`,
-      opacity: 0.55 + 0.45 * size / maxSize,
+      "--peak-opacity": 0.55 + 0.45 * size / maxSize,
       zIndex: Math.round(size),
     };
   });

@@ -776,14 +776,14 @@ html:has(.invitation-intro) { overflow: hidden; }
 }
 .flying-lantern {
   position: absolute;
-  top: 100%;
+  top: 50%;
   left: var(--left);
-  animation: float-lantern var(--duration) ease-in-out var(--delay) both;
+  animation: float-lantern var(--duration) linear var(--delay) both;
 }
 @keyframes float-lantern {
-  from { transform: translate3d(-50%, 12%, 0) rotate(var(--tilt)); }
-  48% { transform: translate3d(calc(-50% + var(--drift)), -48dvh, 0) rotate(calc(-1 * var(--tilt))); }
-  to { transform: translate3d(calc(-50% + .6 * var(--drift)), calc(-100dvh - 150%), 0) rotate(var(--tilt)); }
+  from { opacity: 0; transform: translate3d(-50%, -50%, 0) rotate(var(--tilt)); }
+  28%, 65% { opacity: var(--peak-opacity); }
+  to { opacity: 0; transform: translate3d(calc(-50% + var(--drift)), calc(-50dvh - 100%), 0) rotate(calc(-1 * var(--tilt))); }
 }
 @media (prefers-reduced-motion: reduce) {
   .flying-lantern {
